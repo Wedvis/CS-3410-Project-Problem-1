@@ -1,14 +1,14 @@
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public class AttributeSet
 {
-    private final HashSet<String> attributes;
+    private final TreeSet<String> attributes;
 
     public AttributeSet(String... attributes)
     {
-        this.attributes = new HashSet<>(Arrays.asList(attributes));
+        this.attributes = new TreeSet<>(Arrays.asList(attributes));
     }
 
     public boolean equals(Object o)
