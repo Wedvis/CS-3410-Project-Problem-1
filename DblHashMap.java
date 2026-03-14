@@ -3,7 +3,8 @@ package group_project;
 import java.security.Key;
 
 public class DblHashMap<T> implements CustomHashMap<T> {
-
+//NOTE, THIS FILE IS NOT TO BE USED FOR THE MAIN DATA STRUCTURE, AS IT DOES NOT USE GENERIC KEYS. IT WILL BE USED FOR TESTING ONLY (once a new interface has been made
+//for this class specifically.
     public KeyVal<T>[] array;
     public int valCount = 0;
 
