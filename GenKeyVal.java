@@ -1,8 +1,8 @@
 package group_project;
 
-public interface GenKeyVal<T> {
+public interface GenKeyVal<T, U> {
 
     T getVal();
     void setVal(T val);
-    String getkey();
+    U getkey();
 }
