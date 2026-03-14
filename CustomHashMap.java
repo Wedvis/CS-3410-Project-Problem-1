@@ -1,11 +1,12 @@
 package group_project;
 
-public interface CustomHashMap<T> {
+public interface CustomHashMap<T, U> {
 
     void resize(int size);
-    int hashfunction(String key);
-    int hash2(String key);
-    void put(T value, String key);
-    GenKeyVal<T> get(String key);
+    int hashfunction(U key);
+    int hash2(int key);
+    void put(T value, U key);
+    GenKeyVal<T, U> get(U key);
+
 }
 
