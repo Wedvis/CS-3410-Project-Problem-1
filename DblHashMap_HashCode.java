@@ -1,0 +1,151 @@
+package group_project;
+
+public class DblHashMap_HashCode<T, U> {
+    public KeyVal<T, U>[] array;
+    public int valCount = 0;
+
+    public DblHashMap_HashCode(int size) {
+        array = new KeyVal[size];
+    }
+
+    //Resize function. Takes all of the values in the HashMap and throws them into a temp array, increases the size
+    //of the internal array, and then uses put to place everything back into the array.
+    //No logic for when to increase size, use manager class to implement that.
+
+    public void resize(int size) {
+        KeyVal<T, U>[] tempArray = new KeyVal[valCount];
+        int j = 0;
+
+        for(int i = 0; i < array.length; ++i) {
+            if(array[i] != null) {
+                tempArray[j] =  array[i];
+                j++;
+            }
+        }
+
+        array = new KeyVal[size];
+
+        for(int i = 0; i < tempArray.length; i++) {
+            put(tempArray[i].getVal(), tempArray[i].getkey());
+        }
+    }
+
+    //primary hash function, uses djb2 algorithm for hashing with high entropy large numbers
+    //along with prime number multiplication
+
+    public int hashfunction(U key) {
+        int jbCode = key.hashCode();
+        return jbCode;
+    }
+
+    //Secondary hash function, turns integer into a string, reverses it, and turns back into
+    //an integer
+
+    public int hash2(int key) {
+        String hash = String.format("%d", key);
+        String newHash = "";
+
+        for(int i = hash.length(); i >= 1; i--) {
+            newHash += hash.substring(i-1, i);
+        }
+        System.out.println(newHash);
+
+        return Integer.parseInt(newHash);
+    }
+
+    //Helper for put, probes for next spot to place the value. Does so by using secondary hash function,
+    //and then adding 1 for every subsequent position in the array, to scan the whole array for a place.
+    private void probe(int key, KeyVal<T, U> keyval) {
+        int newHash = hash2(key);
+        boolean noPlace = true;
+
+        for(int i = 0; i < array.length; i++) {
+            int index = (newHash + i) % array.length;
+
+
+            if(array[index] == null) {
+                array[index] = keyval;
+                valCount += 1;
+                noPlace = false;
+                break;
+            }
+            else if(keyval.getkey().equals(array[index].getkey())){
+                array[index] = keyval;
+                noPlace = false;
+                break;
+            }
+
+        }
+
+        if(noPlace) {
+            System.out.println("No position for the key to go");
+        }
+    }
+
+    //Helper for get, probes just like the probe function, but tries to find the key instead. If not found,
+    //returns -1
+    private int find(U key) {
+
+        int newHash = hash2(key.hashCode());
+
+
+        for(int i = 0; i < array.length; i++) {
+            int index = (newHash + i) % array.length;
+
+            if(array[index] != null) {
+                if(key.equals(array[index].getkey())){
+                    return index;
+                }
+            }
+
+        }
+
+        return -1;
+    }
+
+    //Put function, uses first hash function to hash key into a position. If that position has something,
+    //check if the keys are equal. If keys are equal, replace value, if keys are not equal, start probing.
+
+    public void put(T value, U key) {
+        KeyVal<T, U> keyval = new KeyVal(value, key);
+        int index = hashfunction(key) % array.length;
+
+
+        if(array[index] == null) {
+            array[index] = keyval;
+            valCount += 1;
+        }
+        else {
+            if(key.equals(array[index].getkey())) {
+                array[index] = keyval;
+            }
+            else {
+                probe(key.hashCode(), keyval);
+            }
+        }
+    }
+
+    //get function, IMPORTANT: will produce null value if key is not found, either initially or through using
+    //find. Make sure the manager is able to account for the null values.
+
+    public GenKeyVal<T, U> get(U key) {
+        KeyVal<T, U> keyval = array[hashfunction(key) % array.length];
+
+        if(keyval == null) {
+            return null;
+        }
+        else if(keyval.getkey().equals(key)) {
+            return keyval;
+        }
+        else {
+            int newIndex = find(key);
+            if(newIndex != -1) {
+                return array[newIndex];
+            }
+            else {
+                System.out.println("key not found");
+                return null;
+            }
+        }
+    }
+}
