@@ -1,12 +1,12 @@
 package group_project;
 
-public class KeyVal<T> implements GenKeyVal<T> {
+public class KeyVal<T, U> implements GenKeyVal<T, U> {
 
     T value;
-    String key;
+    U key;
 
 
-    public KeyVal(T value, String key) {
+    public KeyVal(T value, U key) {
         this.value = value;
         this.key = key;
     }
@@ -21,7 +21,8 @@ public class KeyVal<T> implements GenKeyVal<T> {
     }
 
     @Override
-    public String getkey() {
+    public U getkey() {
         return key;
     }
 }
+
