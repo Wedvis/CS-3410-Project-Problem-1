@@ -3,6 +3,7 @@ package group_project;
 public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
     public KeyVal<T, U>[] array;
     public int valCount = 0;
+    public boolean isResize = false;
 
     public DblHashMap_HashCode(int size) {
         array = new KeyVal[size];
@@ -13,6 +14,7 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
     //No logic for when to increase size, use manager class to implement that.
 
     public void resize(int size) {
+        isResize = true;
         KeyVal<T, U>[] tempArray = new KeyVal[valCount];
         int j = 0;
 
@@ -28,20 +30,24 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
         for(int i = 0; i < tempArray.length; i++) {
             put(tempArray[i].getVal(), tempArray[i].getkey());
         }
+        isResize = false;
     }
 
     //primary hash function, uses djb2 algorithm for hashing with high entropy large numbers
     //along with prime number multiplication
 
-    public int hashfunction(U key) {
+    public long hashfunction(U key) {
         int jbCode = key.hashCode();
+        if(jbCode < 0) {
+            return jbCode * -1;
+        }
         return jbCode;
     }
 
     //Secondary hash function, turns integer into a string, reverses it, and turns back into
     //an integer
 
-    public int hash2(int key) {
+    public long hash2(long key) {
         String hash = String.format("%d", key);
         String newHash = "";
 
@@ -50,22 +56,24 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
         }
         System.out.println(newHash);
 
-        return Integer.parseInt(newHash);
+        return (long)Integer.parseInt(newHash);
     }
 
     //Helper for put, probes for next spot to place the value. Does so by using secondary hash function,
     //and then adding 1 for every subsequent position in the array, to scan the whole array for a place.
-    private void probe(int key, KeyVal<T, U> keyval) {
-        int newHash = hash2(key);
+    private void probe(long key, KeyVal<T, U> keyval) {
+        long newHash = hash2(key);
         boolean noPlace = true;
 
         for(int i = 0; i < array.length; i++) {
-            int index = (newHash + i) % array.length;
+            int index = (int)((newHash + i) % array.length);
 
 
             if(array[index] == null) {
                 array[index] = keyval;
-                valCount += 1;
+                if(!isResize) {
+                    valCount += 1;
+                }
                 noPlace = false;
                 break;
             }
@@ -86,11 +94,11 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
     //returns -1
     private int find(U key) {
 
-        int newHash = hash2(key.hashCode());
+        long newHash = hash2(hashfunction(key));
 
 
         for(int i = 0; i < array.length; i++) {
-            int index = (newHash + i) % array.length;
+            int index = (int)((newHash + i) % array.length);
 
             if(array[index] != null) {
                 if(key.equals(array[index].getkey())){
@@ -108,19 +116,21 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
 
     public void put(T value, U key) {
         KeyVal<T, U> keyval = new KeyVal(value, key);
-        int index = hashfunction(key) % array.length;
+        int index = (int)(hashfunction(key) % array.length);
 
 
         if(array[index] == null) {
             array[index] = keyval;
-            valCount += 1;
+            if(!isResize) {
+                valCount += 1;
+            }
         }
         else {
             if(key.equals(array[index].getkey())) {
                 array[index] = keyval;
             }
             else {
-                probe(key.hashCode(), keyval);
+                probe(hashfunction(key), keyval);
             }
         }
     }
@@ -129,7 +139,7 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
     //find. Make sure the manager is able to account for the null values.
 
     public GenKeyVal<T, U> get(U key) {
-        KeyVal<T, U> keyval = array[hashfunction(key) % array.length];
+        KeyVal<T, U> keyval = array[(int) (hashfunction(key) % array.length)];
 
         if(keyval == null) {
             return null;
