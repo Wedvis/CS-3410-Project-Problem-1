@@ -1,6 +1,6 @@
 package group_project;
 
-public class DblHashMap_HashCode<T, U> {
+public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
     public KeyVal<T, U>[] array;
     public int valCount = 0;
 

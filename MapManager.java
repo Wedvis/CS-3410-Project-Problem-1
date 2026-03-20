@@ -4,8 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapManager<T> {
-    StableList<T> objects;
-    CustomHashMap<List<Integer>, AttributeSet> maps;
+    private StableList<T> objects;
+    private CustomHashMap<List<Integer>, AttributeSet> maps;
+
+    public MapManager(StableList<T> objects, CustomHashMap<List<Integer>, AttributeSet> map)
+    {
+        this.objects = objects;
+        this.maps = map;
+    }
+
+    public MapManager(CustomHashMap<List<Integer>,AttributeSet> map)
+    {
+        this(new StableList<>(),map);
+    }
 
     public void putObject(T object, AttributeSet attributes)
     {
@@ -32,12 +43,17 @@ public class MapManager<T> {
 
     public List<Integer> getId(AttributeSet attributes)
     {
-        return maps.get(attributes).getVal();
+        GenKeyVal<List<Integer>, AttributeSet> val = maps.get(attributes);
+        if(val==null)
+            return null;
+        return val.getVal();
     }
 
     public List<T> get(AttributeSet attributes)
     {
         List<Integer> id = getId(attributes);
+        if(id==null)
+            return null;
         List<T> obList = new ArrayList<>();
         for(Integer idInt : id)
         {

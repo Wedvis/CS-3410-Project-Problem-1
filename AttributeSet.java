@@ -27,6 +27,7 @@ public class AttributeSet
             var sSet = (HashSet<String>)hSet;
             subsets.add(new AttributeSet(sSet));
         }
+        subsets.add(this);
         return subsets;
     }
 
@@ -63,6 +64,11 @@ public class AttributeSet
             hash = hash * 7 + djb2(att);
         }
         return hash;
+    }
+
+    public String toString()
+    {
+        return attributes.toString();
     }
 
     public static int djb2(String code)

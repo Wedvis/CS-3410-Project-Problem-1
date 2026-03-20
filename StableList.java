@@ -1,5 +1,6 @@
 package group_project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StableList<T>
@@ -7,6 +8,13 @@ public class StableList<T>
     List<Integer> dataIndex;
     List<Integer> dataId;
     List<T> data;
+
+    public StableList()
+    {
+        this.dataIndex = new ArrayList<>();
+        this.dataId = new ArrayList<>();
+        this.data = new ArrayList<>();
+    }
 
     public int add(T value)
     {
