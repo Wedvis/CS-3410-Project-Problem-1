@@ -13,15 +13,21 @@ public class MapManager<T> {
         this.maps = map;
     }
 
+    public int numObjects()
+    {
+        return objects.size();
+    }
+
     public MapManager(CustomHashMap<List<Integer>,AttributeSet> map)
     {
         this(new StableList<>(),map);
     }
 
-    public void putObject(T object, AttributeSet attributes)
+    public int putObject(T object, AttributeSet attributes)
     {
         int id = objects.add(object);
         pathValue(id,attributes);
+        return id;
     }
 
     private void pathValue(int val,AttributeSet attributes)
@@ -40,6 +46,23 @@ public class MapManager<T> {
             attList.add(val);
         }
     }
+
+    public void removeId(int id, AttributeSet attributes)
+    {
+        objects.remove(id);
+        for(AttributeSet att : attributes.generateSubsets())
+        {
+            GenKeyVal<List<Integer>,AttributeSet> gKey = maps.get(att);
+            List<Integer> attList=null;
+            if(gKey!=null)
+                attList = gKey.getVal();
+            if(attList==null)
+                continue;
+            attList.remove(id);
+        }
+    }
+
+
 
     public List<Integer> getId(AttributeSet attributes)
     {

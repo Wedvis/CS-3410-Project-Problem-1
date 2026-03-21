@@ -58,12 +58,12 @@ public class AttributeSet
     
     public int hashCode()
     {
-        int hash = 1;
+        long hash = 1;
         for(String att : attributes)
         {
-            hash = hash * 7 + djb2(att);
+            hash = hash * 7 + hashString(att);
         }
-        return hash;
+        return (int)hash;
     }
 
     public String toString()
@@ -80,5 +80,9 @@ public class AttributeSet
             jbCode = jbCode * 31 + c;
         }
         return jbCode;
+    }
+    public int hashString(String code)
+    {
+        return djb2(code);
     }
 }

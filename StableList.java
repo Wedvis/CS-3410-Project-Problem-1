@@ -16,6 +16,11 @@ public class StableList<T>
         this.data = new ArrayList<>();
     }
 
+    public int size()
+    {
+        return data.size();
+    }
+
     public int add(T value)
     {
         if(dataId.size()==data.size())
