@@ -1,15 +1,17 @@
 package group_project;
 
-import java.security.Key;
 
-public class DblHashMap<T> implements CustomHashMap<T> {
-//NOTE, THIS FILE IS NOT TO BE USED FOR THE MAIN DATA STRUCTURE, AS IT DOES NOT USE GENERIC KEYS. IT WILL BE USED FOR TESTING ONLY (once a new interface has been made
-//for this class specifically.
-    public KeyVal<T>[] array;
+public class DblHashMap<T> implements StringHashMap<T> {
+
+    public StringKeyVal<T>[] array;
     public int valCount = 0;
+    public boolean isResize = false;
+    public int collisions = 0;
+    public int probes_put = 0;
+    public int probes_find = 0;
 
     public DblHashMap(int size) {
-        array = new KeyVal[size];
+        array = new StringKeyVal[size];
     }
 
     //Resize function. Takes all of the values in the HashMap and throws them into a temp array, increases the size
@@ -17,7 +19,8 @@ public class DblHashMap<T> implements CustomHashMap<T> {
     //No logic for when to increase size, use manager class to implement that.
     @Override
     public void resize(int size) {
-        KeyVal<T>[] tempArray = new KeyVal[valCount];
+        isResize = true;
+        StringKeyVal<T>[] tempArray = new StringKeyVal[valCount];
         int j = 0;
 
         for(int i = 0; i < array.length; ++i) {
@@ -27,53 +30,85 @@ public class DblHashMap<T> implements CustomHashMap<T> {
             }
         }
 
-        array = new KeyVal[size];
+        array = new StringKeyVal[size];
 
         for(int i = 0; i < tempArray.length; i++) {
             put(tempArray[i].getVal(), tempArray[i].getkey());
         }
+        isResize = false;
+    }
+
+    public void resizePrime() {
+        isResize = true;
+        int newSize = array.length * 2;
+
+        while(!isPrime(newSize)) {
+            ++newSize;
+        }
+
+        StringKeyVal<T>[] tempArray = new StringKeyVal[valCount];
+        int j = 0;
+
+        for(int i = 0; i < array.length; ++i) {
+            if(array[i] != null) {
+                tempArray[j] =  array[i];
+                j++;
+            }
+        }
+
+        array = new StringKeyVal[newSize];
+
+        for(int i = 0; i < tempArray.length; i++) {
+            put(tempArray[i].getVal(), tempArray[i].getkey());
+        }
+
+
+        isResize = false;
     }
 
     //primary hash function, uses djb2 algorithm for hashing with high entropy large numbers
     //along with prime number multiplication
     @Override
-    public int hashfunction(String key) {
-        char[] carr = key.toCharArray();
-        int jbCode = 1;
-        for(char c : carr)
-        {
-            jbCode = jbCode * 7 + c;
+    public long hashfunction(String key) {
+        HashFunctions hf = new HashFunctions();
+        if(hf.fnv1(key) < 0) {
+            return -1 * hf.fnv1(key);
         }
-        return jbCode;
+        return hf.fnv1(key);
     }
 
     //Secondary hash function, also uses djb2, multiplies by a different prime number.
     //NOTE: both of these hash functions can easily integer overflow if not handled correctly, potentially
     //change return type to (long)
     @Override
-    public int hash2(String key) {
-        char[] carr = key.toCharArray();
-        int jbCode = 1;
-        for(char c : carr)
-        {
-            jbCode = jbCode * 11 + c;
+    public long hash2(String key) {
+       HashFunctions hf = new HashFunctions();
+        if(hf.fnv1a(key) < 0) {
+            return -1 * hf.fnv1a(key);
         }
-        return jbCode;
+       return hf.fnv1a(key);
     }
 
     //Helper for put, probes for next spot to place the value. Does so by using secondary hash function,
     //and then adding 1 for every subsequent position in the array, to scan the whole array for a place.
-    private void probe(String key, KeyVal<T> keyval) {
-        int newHash = hash2(key);
+    private void probe(String key, StringKeyVal<T> keyval) {
+        //long newHash = 17 - (hash2(key) % 17);
+        long newHash = hash2(key);
+        //long oldHash = hashfunction(key);
         boolean noPlace = true;
 
         for(int i = 0; i < array.length; i++) {
-            int index = (newHash + i) % array.length;
+            //int index = ((int)((oldHash + (i * newHash)) % array.length));
+            ++probes_put;
+            int index = ((int)((newHash + i) % array.length));
+            //Replace above line of code with commented line if you want to use prime numbers for table size
 
 
             if(array[index] == null) {
                 array[index] = keyval;
-                valCount += 1;
+                if(!isResize) {
+                    valCount += 1;
+                }
                 noPlace = false;
                 break;
             }
@@ -86,7 +121,7 @@ public class DblHashMap<T> implements CustomHashMap<T> {
         }
 
         if(noPlace) {
-            System.out.println("No position for the key to go");
+            System.out.println("No position for " + key + " to go, table size: " + array.length);
         }
     }
 
@@ -94,11 +129,17 @@ public class DblHashMap<T> implements CustomHashMap<T> {
     //returns -1
     private int find(String key) {
 
-        int newHash = hash2(key);
+        //long newHash = 17 - (hash2(key) % 17);
+        long newHash = hash2(key);
+        //long oldHash = hashfunction(key);
+
 
 
         for(int i = 0; i < array.length; i++) {
-            int index = (newHash + i) % array.length;
+            //int index = ((int)((oldHash + (i * newHash)) % array.length));
+            ++probes_find;
+            int index = ((int)((newHash + i) % array.length));
+            //replace above code with commented line if you want to use prime table size.
 
             if(array[index] != null) {
                 if(key.equals(array[index].getkey())){
@@ -115,13 +156,16 @@ public class DblHashMap<T> implements CustomHashMap<T> {
     //Check if it the keys are equal. If keys are equal, replace value, if keys are not equal, start probing.
     @Override
     public void put(T value, String key) {
-        KeyVal<T> keyval = new KeyVal(value, key);
-        int index = hashfunction(key) % array.length;
-        System.out.println(hashfunction(key));
+        StringKeyVal<T> keyval = new StringKeyVal(value, key);
+        int index = (int)(hashfunction(key) % array.length);
 
         if(array[index] == null) {
             array[index] = keyval;
-            valCount += 1;
+
+            if(!isResize) {
+                valCount += 1;
+            }
+
         }
         else {
             if(key.equals(array[index].getkey())) {
@@ -129,6 +173,9 @@ public class DblHashMap<T> implements CustomHashMap<T> {
             }
             else {
                 probe(key, keyval);
+                if(!isResize) {
+                    collisions += 1;
+                }
             }
         }
     }
@@ -136,8 +183,8 @@ public class DblHashMap<T> implements CustomHashMap<T> {
     //get function, IMPORTANT: will produce null valueif key is not found, either initially or through using
     //find. Make sure the manager is able to account for the null values.
     @Override
-    public GenKeyVal<T> get(String key) {
-        KeyVal<T> keyval = array[hashfunction(key) % array.length];
+    public StringKeyVal<T> get(String key) {
+        StringKeyVal<T> keyval = array[(int)(hashfunction(key) % array.length)];
 
         if(keyval == null) {
             return null;
@@ -156,4 +203,26 @@ public class DblHashMap<T> implements CustomHashMap<T> {
             }
         }
     }
+
+    //Found this algorithm for finding prime numbers from
+    // https://www.geeksforgeeks.org/java/java-prime-number-program/
+
+    private boolean isPrime(int n) {
+        // Corner case
+        if (n <= 1)
+            return false;
+        // For n=2 or n=3 it will check
+        if (n == 2 || n == 3)
+            return true;
+        // For multiple of 2 or 3 This will check
+        if (n % 2 == 0 || n % 3 == 0)
+            return false;
+        // It will check all the others condition
+        for (int i = 5; i <= Math.sqrt(n); i = i + 6)
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+
+        return true;
+    }
 }
+
