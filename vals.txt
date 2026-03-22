@@ -1,0 +1,3 @@
+FNV (nano time): 490722800
+djb2 (nano time): 437221700
+murmurhash3 (nano time): 663735600
