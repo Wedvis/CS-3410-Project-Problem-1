@@ -23,6 +23,7 @@ public class MapManager<T> {
         this(new StableList<>(),map);
     }
 
+    //Places object at attribute and assigns id
     public int putObject(T object, AttributeSet attributes)
     {
         int id = objects.add(object);
@@ -30,6 +31,7 @@ public class MapManager<T> {
         return id;
     }
 
+    //Places id at all attribute subsets
     private void pathValue(int val,AttributeSet attributes)
     {
         for(AttributeSet att : attributes.generateSubsets())
@@ -49,7 +51,8 @@ public class MapManager<T> {
 
     public void removeId(int id, AttributeSet attributes)
     {
-        objects.remove(id);
+        if(objects.remove(id)==null)
+            return;
         for(AttributeSet att : attributes.generateSubsets())
         {
             GenKeyVal<List<Integer>,AttributeSet> gKey = maps.get(att);
@@ -58,12 +61,26 @@ public class MapManager<T> {
                 attList = gKey.getVal();
             if(attList==null)
                 continue;
-            attList.remove(id);
+            attList.remove((Integer)id);
         }
+    }
+
+    public void set(int id, AttributeSet attributes,T object)
+    {
+        removeId(id, attributes);
+        pathValue(id, attributes);
+        objects.set(id,object);
+    }
+
+    //Remind me to save the table layout too
+    public String toString()
+    {
+        return objects.toString();
     }
 
 
 
+    //Gets all ids with attributes
     public List<Integer> getId(AttributeSet attributes)
     {
         GenKeyVal<List<Integer>, AttributeSet> val = maps.get(attributes);
@@ -72,6 +89,7 @@ public class MapManager<T> {
         return val.getVal();
     }
 
+    //Grabs all cards with attributes
     public List<T> get(AttributeSet attributes)
     {
         List<Integer> id = getId(attributes);
