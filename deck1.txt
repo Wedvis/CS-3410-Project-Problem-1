@@ -1,0 +1,8 @@
+//
+25
+Pikachu
+Pokémon,Electric,Basic,Stage 2
+//
+1
+Bulbasaur
+Pokémon,Grass,Basic,Stage 1
