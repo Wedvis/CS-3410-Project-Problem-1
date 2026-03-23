@@ -17,7 +17,7 @@ The Line after that contains the attributes: EX: Pokemon,Electric,Basic,Stage 2
 
 
 
-public class ReadFileTest {
+public class Test_ReadFile {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		String PATH = "src/application/deck1.txt";
