@@ -37,6 +37,14 @@ public class CardManager
         manager.removeId(cd.getId(),new AttributeSet(cd.getAtributes()));
     }
 
+    public CardObject removeById(int id)
+    {
+        CardObject card = manager.getById(id);
+        assert(card.getId()==id);
+        manager.removeId(card.getId(), new AttributeSet(card.getAtributes()));
+        return card;
+    }
+
     //Grabs all Card Objects matching attributes provided
     public List<CardObject> getMatching(AttributeSet attributes)
     {

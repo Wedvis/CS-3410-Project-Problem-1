@@ -1,5 +1,6 @@
 package group_project;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,16 +20,54 @@ public class AttributeSet
         this.attributes = new TreeSet<>(attributes);
     }
 
+    // public HashSet<AttributeSet> generateSubsets()
+    // {
+    //     HashSet<AttributeSet> subsets = new HashSet<>();
+    //     for(HashSet<?> hSet : addSubsets(new HashSet<>(attributes)))
+    //     {
+    //         var sSet = (HashSet<String>)hSet;
+    //         subsets.add(new AttributeSet(sSet));
+    //     }
+    //     subsets.add(this);
+    //     return subsets;
+    // }
+
+    void addOne(boolean[] arr)
+    {
+        boolean carry = true;
+        for(int i = 0; i<arr.length;i++)
+        {
+            if(carry&&arr[i])
+            {
+                arr[i]=false;
+                carry=true;
+            }
+            else if(carry)
+            {
+                arr[i]=true;
+                carry=false;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
     public HashSet<AttributeSet> generateSubsets()
     {
-        HashSet<AttributeSet> subsets = new HashSet<>();
-        for(HashSet<?> hSet : addSubsets(new HashSet<>(attributes)))
+        HashSet<AttributeSet> subSets = new HashSet<>();
+        boolean[] bitArr = new boolean[attributes.size()];
+        for(int i = 0; i<(1<<attributes.size());i++)
         {
-            var sSet = (HashSet<String>)hSet;
-            subsets.add(new AttributeSet(sSet));
+            ArrayList<String> newSet = new ArrayList<>(attributes);
+            for(int j = attributes.size()-1; j>=0;j--)
+                if(!bitArr[j])
+                    newSet.remove(j);
+            subSets.add(new AttributeSet(newSet));
+            addOne(bitArr);
         }
-        subsets.add(this);
-        return subsets;
+        return subSets;
     }
 
     private HashSet<HashSet<?>> addSubsets(HashSet<?> set)
@@ -43,6 +82,7 @@ public class AttributeSet
         }
         return subSets;
     }
+
 
     public AttributeSet clone()
     {
@@ -71,6 +111,7 @@ public class AttributeSet
         return attributes.toString();
     }
 
+    // Can change this to any hash func
     public static int djb2(String code)
     {
         char[] carr = code.toCharArray();

@@ -65,6 +65,11 @@ public class MapManager<T> {
         }
     }
 
+    public T getById(int id)
+    {
+        return objects.get(id);
+    }
+
     public void set(int id, AttributeSet attributes,T object)
     {
         removeId(id, attributes);
