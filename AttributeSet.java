@@ -115,19 +115,8 @@ public class AttributeSet
         return attributes.toString();
     }
 
-    // Can change this to any hash func
-    public static int djb2(String code)
+    public long hashString(String code)
     {
-        char[] carr = code.toCharArray();
-        int jbCode = 1;
-        for(char c : carr)
-        {
-            jbCode = jbCode * 31 + c;
-        }
-        return jbCode;
-    }
-    public int hashString(String code)
-    {
-        return djb2(code);
+        return HashFunctions.fnv1(code);
     }
 }
