@@ -48,15 +48,12 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
     //an integer
 
     public long hash2(long key) {
-        String hash = String.format("%d", key);
-        String newHash = "";
-
-        for(int i = hash.length(); i >= 1; i--) {
-            newHash += hash.substring(i-1, i);
+        long hash = HashFunctions.javaIntRandomize(key);
+        if(hash < 0) {
+            hash *= -1;
         }
-        System.out.println(newHash);
 
-        return (long)Integer.parseInt(newHash);
+        return hash;
     }
 
     //Helper for put, probes for next spot to place the value. Does so by using secondary hash function,
