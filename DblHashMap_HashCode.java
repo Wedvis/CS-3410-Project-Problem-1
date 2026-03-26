@@ -37,6 +37,8 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
     //along with prime number multiplication
 
     public long hashfunction(U key) {
+        if(key instanceof Number k)
+            return hash2(k.longValue());
         int jbCode = key.hashCode();
         if(jbCode < 0) {
             return jbCode * -1;
