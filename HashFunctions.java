@@ -8,6 +8,8 @@ public class HashFunctions {
     //every hash produces a long data type, to use in a bucket, modulo the value by table size and then typecaste
     //to int using (int)
     //ex: int bucket = (int)(hash % tableSize);
+    //None of these hash functions were made by us, they are just widely used hash functions which we did research on and implemented.
+    
     public static long murmurhash3(String key) {
         HashFunction murmurHash3_32_1 = Hashing.murmur3_32_fixed(42);
         int hash = murmurHash3_32_1.newHasher().putString(key, java.nio.charset.StandardCharsets.UTF_8).hash().asInt();
