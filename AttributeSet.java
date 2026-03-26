@@ -53,6 +53,10 @@ public class AttributeSet
             }
         }
     }
+    public Collection<String> getAttributes()
+    {
+        return attributes;
+    }
 
     public HashSet<AttributeSet> generateSubsets()
     {

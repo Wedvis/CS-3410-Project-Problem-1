@@ -1,6 +1,6 @@
 package group_project;
-import com.google.common.hash.Hashing;
-import com.google.common.hash.HashFunction;
+// import com.google.common.hash.Hashing;
+// import com.google.common.hash.HashFunction;
 //NOTE, to use the murmurhash3, you need to install the guava-33.5.0-jre.jar file, which gives you the guava
 //hashing libraries.
 public class HashFunctions {
@@ -10,19 +10,19 @@ public class HashFunctions {
     //ex: int bucket = (int)(hash % tableSize);
     //None of these hash functions were made by us, they are just widely used hash functions which we did research on and implemented.
     
-    public static long murmurhash3(String key) {
-        HashFunction murmurHash3_32_1 = Hashing.murmur3_32_fixed(42);
-        int hash = murmurHash3_32_1.newHasher().putString(key, java.nio.charset.StandardCharsets.UTF_8).hash().asInt();
+    // public static long murmurhash3(String key) {
+    //     HashFunction murmurHash3_32_1 = Hashing.murmur3_32_fixed(42);
+    //     int hash = murmurHash3_32_1.newHasher().putString(key, java.nio.charset.StandardCharsets.UTF_8).hash().asInt();
 
-        return Integer.toUnsignedLong(hash);
-    }
+    //     return Integer.toUnsignedLong(hash);
+    // }
 
-    public static long murmurhash3_dbl(String key) {
-        HashFunction murmurHash3_32_1 = Hashing.murmur3_32_fixed(69);
-        int hash = murmurHash3_32_1.newHasher().putString(key, java.nio.charset.StandardCharsets.UTF_8).hash().asInt();
+    // public static long murmurhash3_dbl(String key) {
+    //     HashFunction murmurHash3_32_1 = Hashing.murmur3_32_fixed(69);
+    //     int hash = murmurHash3_32_1.newHasher().putString(key, java.nio.charset.StandardCharsets.UTF_8).hash().asInt();
 
-        return Integer.toUnsignedLong(hash);
-    }
+    //     return Integer.toUnsignedLong(hash);
+    // }
 
     public static long fnv1a(String key) {
         final long FNV_PRIME = 0x01000193;  //Hexadecimal for 16777619

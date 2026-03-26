@@ -1,14 +1,18 @@
 package group_project;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
 
 public class MapManager<T> {
-    private StableList<T> objects;
+    private TreeSet<String> allAttributes;
+    private IdTable<T> objects;
     private CustomHashMap<List<Integer>, AttributeSet> maps;
 
-    public MapManager(StableList<T> objects, CustomHashMap<List<Integer>, AttributeSet> map)
+    public MapManager(IdTable<T> objects, CustomHashMap<List<Integer>, AttributeSet> map)
     {
+        this.allAttributes = new TreeSet<>();
         this.objects = objects;
         this.maps = map;
     }
@@ -20,7 +24,7 @@ public class MapManager<T> {
 
     public MapManager(CustomHashMap<List<Integer>,AttributeSet> map)
     {
-        this(new StableList<>(),map);
+        this(new IdTable<>(),map);
     }
 
     //Places object at attribute and assigns id
@@ -34,20 +38,57 @@ public class MapManager<T> {
     //Places id at all attribute subsets
     private void pathValue(int val,AttributeSet attributes)
     {
+        allAttributes.addAll(attributes.getAttributes());
         for(AttributeSet att : attributes.generateSubsets())
         {
-            GenKeyVal<List<Integer>,AttributeSet> gKey = maps.get(att);
+            // GenKeyVal<List<Integer>,AttributeSet> gKey = maps.get(att);
+            // List<Integer> attList=null;
+            // if(gKey!=null)
+            //     attList = gKey.getVal();
+            // if(attList==null)
+            // {
+            //     attList = new ArrayList<>();
+            //     maps.put(attList, att);
+            // }
+            // attList.add(val);
+            directAdd(val, att);
+        }
+    }
+
+    public void directAdd(int val, AttributeSet attributes)
+    {
+        GenKeyVal<List<Integer>,AttributeSet> gKey = maps.get(attributes);
             List<Integer> attList=null;
             if(gKey!=null)
                 attList = gKey.getVal();
             if(attList==null)
             {
                 attList = new ArrayList<>();
-                maps.put(attList, att);
+                maps.put(attList, attributes);
             }
             attList.add(val);
-        }
     }
+
+    public void listAdd(int id,T object)
+    {
+        objects.set(id, object);
+    }
+
+    public void directAddList(Collection<Integer> val, AttributeSet attributes)
+    {
+        GenKeyVal<List<Integer>,AttributeSet> gKey = maps.get(attributes);
+            List<Integer> attList=null;
+            if(gKey!=null)
+                attList = gKey.getVal();
+            if(attList==null)
+            {
+                attList = new ArrayList<>();
+                maps.put(attList, attributes);
+            }
+            System.out.println(val);
+            attList.addAll(val);
+    }
+
 
     public void removeId(int id, AttributeSet attributes)
     {
@@ -70,17 +111,24 @@ public class MapManager<T> {
         return objects.get(id);
     }
 
-    public void set(int id, AttributeSet attributes,T object)
+    // public void set(int id, AttributeSet attributes,T object)
+    // {
+    //     removeId(id, attributes);
+    //     pathValue(id, attributes);
+    //     objects.set(id,object);
+    // }
+    public void set(int id, AttributeSet oldAttributes, AttributeSet newAttributes, T object)
     {
-        removeId(id, attributes);
-        pathValue(id, attributes);
+        if(oldAttributes!=null)
+            removeId(id, oldAttributes);
+        pathValue(id, newAttributes);
         objects.set(id,object);
     }
 
     //Remind me to save the table layout too
     public String toString()
     {
-        return objects.toString();
+        return maps.toString();
     }
 
 
@@ -106,5 +154,9 @@ public class MapManager<T> {
             obList.add(objects.get(idInt));
         }
         return obList;
+    }
+
+    public Collection<String> getAllAttributes() {
+        return allAttributes;
     }
 }
