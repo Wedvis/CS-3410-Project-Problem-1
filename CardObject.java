@@ -7,13 +7,15 @@ public  class CardObject {
 	private int id;
 	private String name;
 	private ArrayList<String> atributes;
+	private String imageURL;
 	
 	
 	
-	public CardObject(int id, String name, ArrayList<String> atributes) {
+	public CardObject(int id, String name, ArrayList<String> atributes, String imageURL) {
 		this.id = id;
 		this.name = name;
 		this.atributes = atributes;
+		this.imageURL = imageURL;
 		
 	}
 	
@@ -27,6 +29,10 @@ public  class CardObject {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getImageURL() {
+		return imageURL;
 	}
 	
 	public TreeSet<String> getAtributes() {
@@ -54,10 +60,11 @@ public  class CardObject {
 	@Override
 	public String toString() {
 		String msg = String.format("id=%d, name=%s", id, name);
-		msg += "\n\nAtributes:";
+		msg += "\nAtributes:";
 		for (String string : atributes) {
 			msg +="\n" + string;
 		}
+		msg += "\n" + imageURL;
 		return msg;
 	}
 }
