@@ -1,0 +1,61 @@
+.root {
+	-fx-padding: 5px, 5px, 5px, 5px;
+	-fx-hgap: 5px;
+	-fx-vgap: 5px;
+}
+HBox, VBox {
+	-fx-padding: 5px;
+    -fx-spacing: 5px;
+}
+.text-area {
+	-fx-font-family: Consolas;
+}
+
+/* These styles must be applied with code */
+.textFieldCreate {
+	-fx-pref-width: 50px;
+}
+.boxBorder {
+    -fx-border-color: black;
+    -fx-background-color: white;
+    -fx-border-width: 0;
+    -fx-border-insets: 5;
+    -fx-border-style: solid;
+    -fx-pref-width: 800;
+    -fx-pref-height: 60;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0.5, 0, 0); 
+ }
+ ScrollPane{
+ 	-fx-effect: dropshadow(three-pass-box, black, 5, 0.5, 0, 0); 
+ }
+ 
+ Button {
+ 	-fx-border-color: black;
+ 	-fx-font-size: 11;
+ 	-fx-font-weight: bold;
+ 	-fx-border-width: 0;
+ 	-fx-border-insets: 5;
+ 	-fx-border-style: solid;
+ 	-fx-padding: 3px;
+ 	-fx-effect: dropshadow(three-pass-box, black, 1, 0.5, 0, 0); 
+ }
+ 
+ MenuButton {
+ 	-fx-effect: dropshadow(three-pass-box, black, 1, 0.5, 0, 0);
+ }
+ 
+ .buttonText {
+ 	-fx-font-size: 30;
+ }
+ 
+ .list-cell {
+	-fx-padding: 0px;
+}
+
+
+#pane{
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 900 506;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
