@@ -34,11 +34,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 
-//Requires JavaFX 3 library to run
-//Will add comments below eveyr funciton soon, just getting everything uploaded
 
 public class Main extends Application {
-	protected Button btnLoad, btnSave, btnRestart, btnShowAll, btnAddCard, btnRemoveCard, btnHelp, btnResetSelection, btnSaveCard, btnAddCardHelp, btnGoBack;
+	protected Button btnLoad, btnSave, btnRestart, btnShowAll, btnAddCard, btnRemoveCard, btnHelp, btnResetSelection, btnSaveCard, btnAddCardHelp, btnGoBack, btnLoadMore;
 	protected TextField txfName, txfType, txfStage, txfSpecial, txfURL;
 	protected MenuButton typeMenuButton = new MenuButton();
 	protected MenuButton stageMenuButton = new MenuButton();
@@ -55,6 +53,8 @@ public class Main extends Application {
 	protected String typeSelectedAttribute = "None";
 	protected String stageSelectedAttribute = "None";
 	protected String specialSelectedAttribute = "None";
+	protected int cardsVBoxHelper = 0;
+	protected int itteratedHelper = 1;
 	protected Stage primaryStage;
 	
 	
@@ -162,15 +162,17 @@ public class Main extends Application {
 							+ "---------------------------------------------\n"
 							+ "To begin: Please click the \"Load\" button to\n"
 							+ "load a premade deck.\n"
-							+ "Or select \"Add a Card\" to create a card!\n"
-							+ "Note large decks will take longer to\n"
-							+ "show every card.";
+							+ "Or select \"Add a Card\" to create a card!\n";
 		
 	    txaResults = new TextArea(beginningMsg);
 	    txaResults.setPrefWidth(650);
 	    txaResults.setEditable(false);
 	    
-	    hBoxBottom.getChildren().addAll(cardImage, txaResults);
+	    btnLoadMore = new Button("Load More");
+	    btnLoadMore.setOnAction(new loadMoreEventHandler());
+	    btnLoadMore.setVisible(false);
+	    
+	    hBoxBottom.getChildren().addAll(cardImage, txaResults, btnLoadMore);
 	    
 	    scrollpane.setContent(cardsVBox);
 	    scrollpane.setPrefHeight(500);
@@ -325,9 +327,7 @@ public class Main extends Application {
 					+ "---------------------------------------------\n"
 					+ "To begin: Please click the \"Load\" button to\n"
 					+ "load a premade deck.\n"
-					+ "Or select \"Add a Card\" to create a card\n"
-					+ "Note large decks will take longer to\n"
-					+ "show every card.";
+					+ "Or select \"Add a Card\" to create a card\n";
 			txaResults.setText(beginningMsg);
 			
 			lblTypeSelected.setText("Type selected:\n    " + "None");
@@ -594,9 +594,7 @@ public class Main extends Application {
 					+ "---------------------------------------------\n"
 					+ "To begin: Please click the \"Load\" button to\n"
 					+ "load a premade deck.\n"
-					+ "Or select \"Add a Card\" to create a card!\n"
-					+ "Note large decks will take longer to\n"
-					+ "show every card.";
+					+ "Or select \"Add a Card\" to create a card!\n";
 
 			txaResults = new TextArea(beginningMsg);
 			txaResults.setPrefWidth(650);
@@ -639,6 +637,10 @@ public class Main extends Application {
 			}
 			else {
 				cardsVBox.setVisible(false);
+				if (itteratedHelper > 1) {
+					btnLoadMore.setVisible(false);
+					txaResults.setPrefWidth(650);
+					}
 				btnShowAll.setText("Show All");
 				txaResults.setText("Select a Card");
 			}
@@ -666,6 +668,9 @@ public class Main extends Application {
 	
 	private void buildCardHBox(List<CardObject> h) throws FileNotFoundException {
 		int i = 0;
+		cardsVBoxHelper = 0;
+		itteratedHelper = 1;
+		boolean isMore = false;
 		HBox hBox = new HBox();
 
 		String msg = "Displayed Cards:\n";
@@ -675,6 +680,10 @@ public class Main extends Application {
 		
 		cardsVBox.getChildren().clear();
 		for (CardObject c : h) {
+			if (cardsVBoxHelper >= 8) {
+				isMore = true;
+				break;
+			}
 			if (i < 4) {
 				msg += c.getName() + "\n";
 				Image image = new Image(c.getImageURL());
@@ -686,6 +695,7 @@ public class Main extends Application {
 			    imageView.setPreserveRatio(true);
 			    hBox.getChildren().add(imageView);
 			    ++i;
+			    ++cardsVBoxHelper;
 			}
 			else {
 				cardsVBox.getChildren().add(hBox);
@@ -700,14 +710,80 @@ public class Main extends Application {
 			    imageView.setPreserveRatio(true);
 			    hBox.getChildren().add(imageView);
 				i = 1;
+				++cardsVBoxHelper;
 			}
 		}
 		if (!hBox.getChildren().isEmpty()) {
 			cardsVBox.getChildren().add(hBox);
 		}
+		if (isMore) {
+			++itteratedHelper;
+			txaResults.setPrefWidth(450);
+			btnLoadMore.setVisible(true);
+			msg += "-------------------------------------------\n"
+				 + "There more cards to load\n"
+				 + "-------------------------------------------\n";
+			
+		}
 
 		txaResults.setText(msg);
 		
+	}
+	private class loadMoreEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			List<CardObject> cardObjects = manager.getMatching(getGUIAttributes());
+			String msg = "";
+			int i = 0;
+			boolean isMore = false;
+			HBox hBox = new HBox();
+			for (int j = cardsVBoxHelper; j < cardObjects.size(); j++) {
+				if (cardsVBoxHelper >= 8*itteratedHelper) {
+					isMore = true;
+					break;
+				}
+				if (i < 4) {
+					msg += cardObjects.get(j).getName() + "\n";
+					Image image = new Image(cardObjects.get(j).getImageURL());
+					ImageView imageView = new ImageView(image);
+					imageView.setX(250);
+					imageView.setY(250);
+					imageView.setFitHeight(250); 
+				    imageView.setFitWidth(250);
+				    imageView.setPreserveRatio(true);
+				    hBox.getChildren().add(imageView);
+				    ++i;
+				    ++cardsVBoxHelper;
+				}
+				else {
+					cardsVBox.getChildren().add(hBox);
+					hBox = new HBox();
+					msg += cardObjects.get(j).getName() + "\n";
+					Image image = new Image(cardObjects.get(j).getImageURL());
+					ImageView imageView = new ImageView(image);
+					imageView.setX(250);
+					imageView.setY(250);
+					imageView.setFitHeight(250); 
+				    imageView.setFitWidth(250);
+				    imageView.setPreserveRatio(true);
+				    hBox.getChildren().add(imageView);
+					i = 1;
+					++cardsVBoxHelper;
+				}
+			}
+			if (!hBox.getChildren().isEmpty()) {
+				cardsVBox.getChildren().add(hBox);
+			}
+			if (isMore) {
+				++itteratedHelper;
+				msg += "-------------------------------------------\n"
+					 + "There may be more cards to load\n"
+					 + "-------------------------------------------\n";
+				msg = txaResults.getText() + msg;
+				txaResults.setText(msg);
+				
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
