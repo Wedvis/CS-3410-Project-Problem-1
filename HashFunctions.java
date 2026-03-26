@@ -71,6 +71,14 @@ public class HashFunctions {
         return hash;
     }
 
+    //https://rosettacode.org/wiki/Pseudo-random_numbers/Splitmix64
+    public static long javaIntRandomize(long key) {
+        key += 0x9e3779b97f4a7c15L;
+        key = (key ^ (key >>> 30)) * 0xbf58476d1ce4e5b9L;
+        key = (key ^ (key >>> 27)) * 0x94d049bb133111ebL;
+        return key ^ (key >>> 31);
+    }
+
     public static long javaHashCode(String key) {
         return key.hashCode();
     }
