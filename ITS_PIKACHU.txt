@@ -1,0 +1,63 @@
+!&%8
+27
+Pikachu
+Pokémon,Electric
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_27.png
+!&%8
+85
+Pikachu with Grey Felt Hat
+Pokémon,Electric
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_85.png
+!&%8
+88
+Pikachu
+Pokémon,Electric
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_88.png
+!&%8
+106
+Pikachu EX
+Pokémon,Electric
+Basic
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_106.png
+!&%8
+214
+Pikachu
+Pokémon,Electric
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_214.png
+!&%8
+81
+Pikachu
+Pokémon,Electric
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SMP/SMP_EN_SM81.png
+!&%8
+112
+Ash's Pikachu
+Pokémon,Electric
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SMP/SMP_EN_SM112.png
+!&%8
+168
+Pikachu&Zekrom GX
+Pokémon,Electric
+Basic
+Tag Team
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SMP/SMP_EN_SM168.png
+!&%8
+62
+Pikachu VMAX
+Pokémon,Electric
+VMAX
+Gigantamax
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SWSHP/SWSHP_EN_SWSH062.png
