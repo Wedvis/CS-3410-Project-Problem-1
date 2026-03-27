@@ -1,0 +1,308 @@
+!&%8
+88
+Pikachu
+Pokémon,Electric,
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_88.png
+!&%8
+46
+Bulbasaur
+Pokémon,Grass
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_46.png
+!&%8
+157
+Cyclizar
+Pokémon,Neutral
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SV04/SV04_EN_157.png
+!&%8
+11
+Mega Latias EX
+Pokémon,Dragon
+Mega
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_11.png
+!&%8
+32
+Annihilape EX
+Pokémon,Fighting
+Stage 2
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_32.png
+!&%8
+2
+Inteleon
+Pokémon,Water
+Stage 2
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_2.png
+!&%8
+3
+Quaxly
+Pokémon,Water
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_3.png
+!&%8
+12
+Dondozo
+Pokémon,Water
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_12.png
+!&%8
+35
+Quaquaval EX
+Pokémon,Water
+Stage 2
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_35.png
+!&%8
+58
+Iron Bundle
+Pokémon,Water
+Basic
+Future
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_58.png
+!&%8
+23
+Ninetales
+Pokémon,Fire
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SWSH1/SWSH1_EN_23.png
+!&%8
+22
+Alolan Ninetales GX
+Pokémon,Water
+Stage 1
+GX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SM2/SM2_EN_22.png
+!&%8
+4
+Mimikyiu EX
+Pokémon,Psychic
+Basic
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_4.png
+!&%8
+1
+Zacian
+Pokémon,Psychic
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_15.png
+!&%8
+2
+Meloetta
+Pokémon,Psychic
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_26.png
+!&%8
+1
+Sprigatito
+Pokémon,Grass
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_1.png
+!&%8
+50
+Meganium
+Pokémon,Grass
+Stage 2
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_1.png
+!&%8
+90
+Spidops
+Pokémon,Grass
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_9.png
+!&%8
+13
+Mega Venusaur EX
+Pokémon,Grass
+Stage 2
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_13.png
+!&%8
+80
+Revavroom
+Pokémon,Metal
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_8.png
+!&%8
+26
+Varoom
+Pokémon,Metal
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_26.png
+!&%8
+39
+Mawile
+Pokémon,Metal
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_39.png
+!&%8
+60
+Aegislash
+Pokémon,Metal
+Stage 2
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_60.png
+!&%8
+73
+Iron Treads EX
+Pokémon,Metal
+Basic
+EX,Future
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_73.png
+!&%8
+90
+Metang
+Pokémon,Metal
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_90.png
+!&%8
+104
+Melmetal EX
+Pokémon,Metal
+Stage 1
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_104.png
+!&%8
+180
+Dialga EX
+Pokémon,Metal
+Basic
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_180.png
+!&%8
+5
+Xerneas
+Pokémon,Fairy
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/XYP/XYP_EN_XY05.png
+!&%8
+7
+Xerneas EX
+Pokémon,Fairy
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/XYP/XYP_EN_XY07.png
+!&%8
+23
+Mega Charizard X EX
+Pokémon,Fire
+stage 2
+Mega,EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_23.png
+!&%8
+156
+Mega Camerupt EX
+Pokémon,Fire
+Stage 1
+Mega,EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/ME01/ME01_EN_156.png
+!&%8
+273
+Mega Emboar EX
+Pokémon,Fire
+Stage 2
+Mega,EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/ME2PT5/ME2PT5_EN_273.png
+!&%8
+32
+Toxtricity
+Pokémon,Darkness
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_17.png
+!&%8
+33
+Sneasel
+Pokémon,Darkness
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_20.png
+!&%8
+34
+Weavile
+Pokémon,Darkness
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_21.png
+!&%8
+35
+Paldean Wooper
+Pokémon,Darkness
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_41.png
+!&%8
+36
+Roaring Moon EX
+Pokémon,Darkness
+Basic
+EX,Ancient
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_67.png
+!&%8
+37
+Mabosstiff
+Pokémon,Darkness
+Stage 1
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_86.png
+!&%8
+38
+Fuecoco
+Pokémon,Fire
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_2.png
+!&%8
+39
+Charcadet
+Pokémon,Fire
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_22.png
+!&%8
+40
+Ceruledge
+Pokémon,Fire
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_14.png
+!&%8
+41
+Oricorio EX
+Pokémon,Fire
+Basic
+EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_24.png
+!&%8
+42
+Chi-Yu
+Pokémon,Fire
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_57.png
+!&%8
+43
+Yveltal
+Pokémon,Darkness
+Basic
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/XY11/XY11_EN_65.png
