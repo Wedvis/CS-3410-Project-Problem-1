@@ -418,6 +418,15 @@ public class Main extends Application {
 			}
 			
 			flipCard();
+			cardsVBox.getChildren().clear();
+			if (cardsVBox.isVisible()) {
+				cardsVBox.setVisible(false);
+				if (itteratedHelper > 1) {
+					btnLoadMore.setVisible(false);
+					txaResults.setPrefWidth(650);
+					}
+				btnShowAll.setText("Show All");
+			}
 			
 			List<CardObject> cardObjects = manager.getMatching(getGUIAttributes());
 			setSelectedAttributes();
@@ -465,6 +474,11 @@ public class Main extends Application {
 				temp.setOnAction(new showImageEventHandler());
 			}
 		}
+		else {
+			String msg = "Hey! No cards exist with your current selection!\n"
+					   + "You should change your selected attributes.";
+			txaResults.setText(msg);
+		}
 	}
 	
 	// Just reflips the card to its back
@@ -505,6 +519,11 @@ public class Main extends Application {
 				try {
 					if(cardObjects != null) {
 						buildCardHBox(cardObjects);
+					}
+					else {
+						String msg = "Hey! No cards exist with your current selection!\n"
+								   + "You should change your selected attributes.";
+						txaResults.setText(msg);
 					}
 				} catch (FileNotFoundException e) {
 					txaResults.setText("Error reading file");
