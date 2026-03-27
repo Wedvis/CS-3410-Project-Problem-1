@@ -6,14 +6,20 @@ import java.util.TreeSet;
 public  class CardObject {
 	private int id;
 	private String name;
+	private String type;
+	private String stage;
+	private String special;
 	private ArrayList<String> atributes;
 	private String imageURL;
 	
 	
 	
-	public CardObject(int id, String name, ArrayList<String> atributes, String imageURL) {
+	public CardObject(int id, String name, String type, String stage, String special, ArrayList<String> atributes, String imageURL) {
 		this.id = id;
 		this.name = name;
+		this.type = type;
+		this.stage = stage;
+		this.special = special;
 		this.atributes = atributes;
 		this.imageURL = imageURL;
 		
@@ -29,6 +35,18 @@ public  class CardObject {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public String getStage() {
+		return stage;
+	}
+	
+	public String getSpecial() {
+		return special;
 	}
 	
 	public String getImageURL() {
