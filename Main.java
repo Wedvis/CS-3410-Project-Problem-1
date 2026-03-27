@@ -1,10 +1,9 @@
 package group_project;
 	
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,6 +48,8 @@ public class Main extends Application {
 	protected TextArea txaResults;
 	protected Label lblTypeSelected, lblStageSelected, lblSpecialSelected, lblName, lblType, lblStage, lblSpecial, lblURL;
 	protected CardManager manager = new CardManager();
+	protected CardObject selectedCard = null;
+	protected Boolean isRemoveCard = false;
 	private final String PATH = "src/group_project";
 	protected String typeSelectedAttribute = "None";
 	protected String stageSelectedAttribute = "None";
@@ -95,6 +96,7 @@ public class Main extends Application {
 		btnLoad.setOnAction(new ReadCardEventHandler(stage));
 		
 		Button btnSave = new Button("Save");
+		btnSave.setOnAction(new saveManagerEventHandler(stage));
 
 		Button btnRestart = new Button("Resart");
 		btnRestart.setOnAction(new restartEventHandler());
@@ -134,6 +136,7 @@ public class Main extends Application {
 		btnAddCard.setOnAction(new addCardEventHandler());
 		
 		Button btnRemoveCard = new Button("Remove a Card");
+		btnRemoveCard.setOnAction(new removeCardBuildEventHandler());
 		
 		Button btnResetSelection = new Button("Reset Selection");
 		btnResetSelection.setOnAction(new resetSelectionEventHandler());
@@ -183,6 +186,7 @@ public class Main extends Application {
 	}
 	
 
+	// Read file
 	private class ReadCardEventHandler implements EventHandler<ActionEvent> {
 		Stage stage;
 		public ReadCardEventHandler(Stage stage) {
@@ -233,7 +237,7 @@ public class Main extends Application {
 	protected void readFile(File file) throws FileNotFoundException {
 		String msg = "Cards Added:\n";
 		msg += "File: " + file.getName() + "\n";
-		msg += "-----------------------\n";
+		msg += "---------------------------------------------\n";
 		Set<String> typeArray = new HashSet<>();
 		Set<String> stageArray = new HashSet<>();
 		Set<String> specialArray = new HashSet<>();
@@ -249,25 +253,27 @@ public class Main extends Application {
 					name = input.nextLine();
 					ArrayList<String> atributes = new ArrayList<String>();
 					
-					String[] tempArray = input.nextLine().split(",");
+					String type = input.nextLine();
+					String[] tempArray = type.split(",");
 					typeArray.addAll(Arrays.asList(tempArray));
 					atributes.addAll(Arrays.asList(tempArray));
 					
-					tempArray = input.nextLine().split(",");
+					String stage = input.nextLine();
+					tempArray = stage.split(",");
 					stageArray.addAll(Arrays.asList(tempArray));
 					atributes.addAll(Arrays.asList(tempArray));
 					
-					line = input.nextLine();
-					if (!line.equals("None")) {
-						tempArray = line.split(",");
+					String special = input.nextLine();
+					if (!special.equals("None")) {
+						tempArray = special.split(",");
 						specialArray.addAll(Arrays.asList(tempArray));
 						atributes.addAll(Arrays.asList(tempArray));
 					}
 					
 					imageURL = input.nextLine();
-					CardObject temp = new CardObject(id, name, atributes, imageURL);
+					CardObject temp = new CardObject(id, name, type, stage, special, atributes, imageURL);
 					msg += temp.toString() + "\n";
-					msg += "-----------------------\n";
+					msg += "---------------------------------------------\n";
 					manager.addCard(temp, false);
 				}
 			}
@@ -280,6 +286,56 @@ public class Main extends Application {
 		}
 	}
 	
+	//Save to file
+	private class saveManagerEventHandler implements EventHandler<ActionEvent> {
+		Stage stage;
+		public saveManagerEventHandler(Stage stage) {
+			super();
+			this.stage = stage;
+		}
+		@Override
+		public void handle(ActionEvent event) {
+			File file = getFile(stage, "Save"); // Display Save dialog
+			if( file != null) {
+	            try {
+	            	writeCardFile(file);
+	            	txaResults.setText("Saved!");
+				}
+	            catch (FileNotFoundException e) {
+	            	txaResults.setText("Error writing file");
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	protected void writeCardFile(File file) throws FileNotFoundException {
+		try {
+			PrintWriter writer = new PrintWriter(file);
+			AttributeSet set = new AttributeSet("Pokémon");
+			String msg = "Saved:\n"
+					   + "---------------------------------------------\n";
+			List<CardObject> cardObjects = manager.getMatching(set);
+			for (CardObject s : cardObjects) {
+				writer.println("!&%8");
+				writer.println(s.getId());
+				writer.println(s.getName());
+				writer.println(s.getType());
+				writer.println(s.getStage());
+				writer.println(s.getSpecial());
+				writer.println(s.getImageURL());
+				msg += s.getName();
+			}
+			writer.close();
+			txaResults.setText(msg);
+		}
+	   catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	}
+	
+	// Builds the attribute dropdowns after loading a file
 	private void buildAttributeDropDown(Set<String> type, Set<String> stage, Set<String> special) {
 		for (String h : type) {
 			MenuItem temp = new MenuItem(h);
@@ -298,28 +354,7 @@ public class Main extends Application {
 		}
 	}
 	
-	private class helpEventHandler implements EventHandler<ActionEvent> {
-		@Override
-		public void handle(ActionEvent event) {
-			String msg = "Button Guide:\n"
-					+ "---------------------------------------------\n"
-					+ "Load: Load Pokémon deck into the program\n"
-					+ "Save: Save current Pokémon deck to a file\n"
-					+ "Restart: Resarts the program and removes current deck\n"
-					+ "Attribute selectores Type/Stage/Special:\n"
-					+ "  Filters what cards will be displayed\n"
-					+ "Help: What you're doing right now!!\n"
-					+ "Card: Select a specific card in the deck\n"
-					+ "Show All: Shows all cards at once\n"
-					+ "Add a Card: Manually add a card to the deck\n"
-					+ "Remove a Card: Manually removes a card from the deck\n"
-					+ "Reset Selection: Resets your card filter\n"
-					+ "(Tip: Remember to save after altering your deck)\n"
-					+ "(Tip: Select the Pokémon attribute only to get all cards)\n";
-			txaResults.setText(msg);
-		}
-	}
-	
+	// Restarts Manager
 	private class restartEventHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -356,30 +391,8 @@ public class Main extends Application {
 		}
 	}
 	
-	private class resetSelectionEventHandler implements EventHandler<ActionEvent> {
-		@Override
-		public void handle(ActionEvent event) {
-			lblTypeSelected.setText("Type selected:\n    " + "None");
-			typeSelectedAttribute = "None";
-			
-			lblStageSelected.setText("Stage selected:\n    " + "None");
-			stageSelectedAttribute = "None";
-			
-			lblSpecialSelected.setText("Special selected:\n    " + "None");
-			specialSelectedAttribute = "None";
-			
-			cardMenuButton.getItems().clear();
-			flipCard();
-			
-			if(btnShowAll.getText().equals("Show One")) {
-				cardsVBox.setVisible(false);
-				btnShowAll.setText("Show All");
-			}
-			
-			txaResults.setText("Selection cleared");
-		}
-	}
-	
+	// Gets attributes from attribute menus
+	// Also calls helper methods to get cards from attributes
 	private class getMenuItemEventHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -412,23 +425,25 @@ public class Main extends Application {
 		}
 	}
 	
-	private void flipCard() {
-		Image image = new Image("https://i0.wp.com/sleevenocardbehind.com/wp-content/uploads/2022/11/thumbnail_IMG_8444.jpg", 500, 500, true, true);
-		cardImage.setImage(image);
-	}
-	
-	private void buildCardDropDown(List<CardObject> s) {
-		cardMenuButton.getItems().clear();
-		if (s!=null) {
-			for (CardObject h : s) {
-				MenuItem temp = new MenuItem(h.getName());
-				cardMenuButton.getItems().add(temp);
-				temp.setOnAction(new showImageEventHandler());
-			}
+	// Builds Attribute Set from GUI selected attributes
+	private AttributeSet getGUIAttributes() {
+		Collection<String>  realAttributes = new ArrayList<>();
+		
+		if (!typeSelectedAttribute.equals("None")) {
+			realAttributes.add(typeSelectedAttribute);
+		}
+		if (!stageSelectedAttribute.equals("None")) {
+			realAttributes.add(stageSelectedAttribute);
+		}
+		if (!specialSelectedAttribute.equals("None")) {
+			realAttributes.add(specialSelectedAttribute);
 		}
 		
+		AttributeSet set = new AttributeSet(realAttributes);
+		return set;
 	}
 	
+	// Sets selected attributes to text box
 	private void setSelectedAttributes() {
 		String [] temp = {typeSelectedAttribute, stageSelectedAttribute, specialSelectedAttribute};
 		String msg = "";
@@ -440,185 +455,48 @@ public class Main extends Application {
 		txaResults.setText(msg);
 	}
 	
-	private class addCardEventHandler implements EventHandler<ActionEvent> {
-		@Override
-		public void handle(ActionEvent event) {
-			hBoxBottom.getChildren().clear();
-			String s1 = "https://i0.wp.com/sleevenocardbehind.com/wp-content/uploads/2022/11/thumbnail_IMG_8444.jpg";
-			Image card = new Image(s1);
-			cardImage = new ImageView(card);
-			cardImage.setX(250);
-			cardImage.setY(250);
-			cardImage.setFitHeight(250); 
-			cardImage.setFitWidth(250);
-			cardImage.setPreserveRatio(true);
-			String msg = "Build a Card!\n"
-					   + "------------------\n"
-					   + "Use link below to\n"
-					   + "get an image link\n"
-					   + "for your card!\n";
-			
-			txaResults = new TextArea(msg);
-		    txaResults.setPrefWidth(200);
-		    txaResults.setEditable(false);
-			
-			Label lblName = new Label("Enter Card Name:        ");
-			txfName = new TextField();
-			HBox name = new HBox(lblName, txfName);
-			
-			Label lblType = new Label("Enter Type Attributes:  ");
-			txfType = new TextField();
-			HBox type = new HBox(lblType, txfType);
-			
-			Label lblStage = new Label("Enter Stage Attribute:  ");
-			txfStage = new TextField();
-			HBox stage = new HBox(lblStage, txfStage);
-			
-			Label lblSpecial = new Label("Enter Special Attribute:");
-			txfSpecial = new TextField();
-			HBox special = new HBox(lblSpecial, txfSpecial);
-			
-			Label lblURL = new Label("Enter Image URL:         ");
-			txfURL = new TextField();
-			HBox URL = new HBox(lblURL, txfURL);
-			
-			Button btnSaveCard = new Button("Save Card");
-			btnSaveCard.setOnAction(new WriteoneCardEventHandler(primaryStage));
-			Button btnAddCardHelp = new Button("Help");
-			btnAddCardHelp.setOnAction(new buildCardHelpEventHandler());
-			Button btnGoBack = new Button("Go Back");
-			btnGoBack.setOnAction(new goBackEventHandler());
-			HBox buttons = new HBox(btnSaveCard, btnAddCardHelp, btnGoBack);
-			
-			class hyperLinkEventHandler implements EventHandler<ActionEvent> {
-				@Override
-				public void handle(ActionEvent event) {
-					getHostServices().showDocument("https://www.pokemon.com/us/pokemon-tcg/pokemon-cards");
-				}
+	// Builds the card dropdown menu from selected attributes
+	private void buildCardDropDown(List<CardObject> s) {
+		cardMenuButton.getItems().clear();
+		if (s!=null) {
+			for (CardObject h : s) {
+				MenuItem temp = new MenuItem(h.getName());
+				cardMenuButton.getItems().add(temp);
+				temp.setOnAction(new showImageEventHandler());
 			}
-			Hyperlink link = new Hyperlink("https://www.pokemon.com/us/pokemon-tcg/pokemon-cards");
-			link.setOnAction(new hyperLinkEventHandler());
-
-			
-			VBox vBox = new VBox(name, type, stage, special, URL, buttons, link);
-			hBoxBottom.getChildren().addAll(cardImage, txaResults, vBox);
 		}
 	}
 	
-	private class buildCardHelpEventHandler implements EventHandler<ActionEvent> {
+	// Just reflips the card to its back
+	private void flipCard() {
+		Image image = new Image("https://i0.wp.com/sleevenocardbehind.com/wp-content/uploads/2022/11/thumbnail_IMG_8444.jpg", 500, 500, true, true);
+		cardImage.setImage(image);
+	}
+	
+	// Displays helper info to the text box
+	private class helpEventHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			String msg = "How to build a card:\n"
-					   + "Check your card for its name\n"
-					   + "Type:Your card's element\n"
-					   + "Stage: Look at your card top left\n"
-					   + "Special: Is it Mega? EX?\n"
-					   + "Else type \"None\"\n"
-					   + "Use link to find your card\n"
-					   + "And copy/paste it's image link";
+			String msg = "Button Guide:\n"
+					+ "---------------------------------------------\n"
+					+ "Load: Load Pokémon deck into the program\n"
+					+ "Save: Save current Pokémon deck to a file\n"
+					+ "Restart: Resarts the program and removes current deck\n"
+					+ "Attribute selectores Type/Stage/Special:\n"
+					+ "  Filters what cards will be displayed\n"
+					+ "Help: What you're doing right now!!\n"
+					+ "Card: Select a specific card in the deck\n"
+					+ "Show All: Shows all cards at once\n"
+					+ "Add a Card: Manually add a card to the deck\n"
+					+ "Remove a Card: Manually removes a card from the deck\n"
+					+ "Reset Selection: Resets your card filter\n"
+					+ "(Tip: Remember to save after altering your deck)\n"
+					+ "(Tip: Select the Pokémon attribute only to get all cards)\n";
 			txaResults.setText(msg);
 		}
 	}
 	
-	private class WriteoneCardEventHandler implements EventHandler<ActionEvent> {
-		Stage stage;
-		public WriteoneCardEventHandler(Stage stage) {
-			super();
-			this.stage = stage;
-		}
-		@Override
-		public void handle(ActionEvent event) {
-			File file = getFile(stage, "Save"); // Display Save dialog
-			if( file != null) {
-	            try {
-	            	writeCardFile(file);
-	            	txaResults.setText("Press \"Restart\" and \nload the file again!");
-				}
-	            catch (FileNotFoundException e) {
-	            	txaResults.setText("Error writing file");
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	protected void writeCardFile(File file) throws FileNotFoundException {
-		int id = (int)(1+1000*Math.random());
-		String name = txfName.getText();
-		ArrayList<String> attributes = new ArrayList<>();
-		attributes.add("Pokémon");
-		attributes.add(txfType.getText());
-		attributes.add(txfStage.getText());
-		attributes.add(txfSpecial.getText());
-		String url = txfURL.getText();
-		CardObject dummy = new CardObject(id, name, attributes,url);
-		manager.addCard(dummy,false);
-		
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
-			bw.newLine();
-			bw.write("!&%8");
-			bw.newLine();
-			bw.write(Integer.toString(dummy.getId()));
-			bw.newLine();
-	        bw.write(name);
-	        bw.newLine();
-	        bw.write("Pokémon," + txfType.getText());
-	        bw.newLine();
-	        bw.write(txfStage.getText());
-	        bw.newLine();
-	        bw.write(txfSpecial.getText());
-	        bw.newLine();
-	        bw.write(url);
-	        bw.close();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-
-	    }
-	}
-	
-	
-	private class goBackEventHandler implements EventHandler<ActionEvent> {
-		@Override
-		public void handle(ActionEvent event) {
-			hBoxBottom.getChildren().clear();
-			String s1 = "https://i0.wp.com/sleevenocardbehind.com/wp-content/uploads/2022/11/thumbnail_IMG_8444.jpg";
-			Image card = new Image(s1);
-			cardImage = new ImageView(card);
-			cardImage.setX(250);
-			cardImage.setY(250);
-			cardImage.setFitHeight(250); 
-			cardImage.setFitWidth(250);
-			cardImage.setPreserveRatio(true);
-			
-			String beginningMsg = "Welcome to the Pokemon Card Database program!\n"
-					+ "---------------------------------------------\n"
-					+ "To begin: Please click the \"Load\" button to\n"
-					+ "load a premade deck.\n"
-					+ "Or select \"Add a Card\" to create a card!\n";
-
-			txaResults = new TextArea(beginningMsg);
-			txaResults.setPrefWidth(650);
-			txaResults.setEditable(false);
-
-			hBoxBottom.getChildren().addAll(cardImage, txaResults);
-		}
-	}
-	
-	private class showImageEventHandler implements EventHandler<ActionEvent> {
-		@Override
-		public void handle(ActionEvent event) {
-			String desiredCard = ((MenuItem) event.getSource()).getText();
-			List<CardObject> cardObjects = manager.getMatching(getGUIAttributes());
-			for(CardObject h : cardObjects) {
-				if (h.getName().equals(desiredCard)) {
-					Image image = new Image(h.getImageURL(), 500, 500, true, true);
-					cardImage.setImage(image);
-					txaResults.setText(h.toString());
-				}
-			}
-		}
-	}
-	
+	// Shows all cards given selected attributes
 	private class showAllEventHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -647,25 +525,9 @@ public class Main extends Application {
 		}
 	}
 	
-	
-	private AttributeSet getGUIAttributes() {
-		Collection<String>  realAttributes = new ArrayList<>();
-		
-		if (!typeSelectedAttribute.equals("None")) {
-			realAttributes.add(typeSelectedAttribute);
-		}
-		if (!stageSelectedAttribute.equals("None")) {
-			realAttributes.add(stageSelectedAttribute);
-		}
-		if (!specialSelectedAttribute.equals("None")) {
-			realAttributes.add(specialSelectedAttribute);
-		}
-		
-		AttributeSet set = new AttributeSet(realAttributes);
-		return set;
-	}
-	
-	
+	// Helper method to showing all cards
+	// Builds VBox to hold all card images
+	// Creates a button to load more cards if theres more than 8
 	private void buildCardHBox(List<CardObject> h) throws FileNotFoundException {
 		int i = 0;
 		cardsVBoxHelper = 0;
@@ -729,6 +591,10 @@ public class Main extends Application {
 		txaResults.setText(msg);
 		
 	}
+	
+	// Helper event to previous helper method
+	// This only kicks in if there are more than 8 cards to show
+	// Will load more cards if pressed
 	private class loadMoreEventHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -782,6 +648,262 @@ public class Main extends Application {
 				msg = txaResults.getText() + msg;
 				txaResults.setText(msg);
 				
+			}
+		}
+	}
+	
+	// Resets selected attributes all back to None
+	private class resetSelectionEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			lblTypeSelected.setText("Type selected:\n    " + "None");
+			typeSelectedAttribute = "None";
+			
+			lblStageSelected.setText("Stage selected:\n    " + "None");
+			stageSelectedAttribute = "None";
+			
+			lblSpecialSelected.setText("Special selected:\n    " + "None");
+			specialSelectedAttribute = "None";
+			
+			cardMenuButton.getItems().clear();
+			flipCard();
+			
+			if(btnShowAll.getText().equals("Show One")) {
+				cardsVBox.setVisible(false);
+				btnShowAll.setText("Show All");
+			}
+			
+			txaResults.setText("Selection cleared");
+		}
+	}
+	
+	// Builds Add Card GUI
+	//------------------------------------------------
+	private class addCardEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			hBoxBottom.getChildren().clear();
+			String s1 = "https://i0.wp.com/sleevenocardbehind.com/wp-content/uploads/2022/11/thumbnail_IMG_8444.jpg";
+			Image card = new Image(s1);
+			cardImage = new ImageView(card);
+			cardImage.setX(250);
+			cardImage.setY(250);
+			cardImage.setFitHeight(250); 
+			cardImage.setFitWidth(250);
+			cardImage.setPreserveRatio(true);
+			String msg = "Build a Card!\n"
+					   + "------------------\n"
+					   + "Use link below to\n"
+					   + "get an image link\n"
+					   + "for your card!\n"
+					   + "Make sure to save\n"
+					   + "after altering the deck!!\n";
+			
+			txaResults = new TextArea(msg);
+		    txaResults.setPrefWidth(200);
+		    txaResults.setEditable(false);
+			
+			Label lblName = new Label("Enter Card Name:        ");
+			txfName = new TextField();
+			HBox name = new HBox(lblName, txfName);
+			
+			Label lblType = new Label("Enter Type Attributes:  ");
+			txfType = new TextField();
+			HBox type = new HBox(lblType, txfType);
+			
+			Label lblStage = new Label("Enter Stage Attribute:  ");
+			txfStage = new TextField();
+			HBox stage = new HBox(lblStage, txfStage);
+			
+			Label lblSpecial = new Label("Enter Special Attribute:");
+			txfSpecial = new TextField();
+			HBox special = new HBox(lblSpecial, txfSpecial);
+			
+			Label lblURL = new Label("Enter Image URL:         ");
+			txfURL = new TextField();
+			HBox URL = new HBox(lblURL, txfURL);
+			
+			Button btnSaveCard = new Button("Save Card");
+			btnSaveCard.setOnAction(new saveCardEventHandler());
+			Button btnAddCardHelp = new Button("Help");
+			btnAddCardHelp.setOnAction(new buildCardHelpEventHandler());
+			Button btnGoBack = new Button("Go Back");
+			btnGoBack.setOnAction(new goBackEventHandler());
+			HBox buttons = new HBox(btnSaveCard, btnAddCardHelp, btnGoBack);
+			
+			class hyperLinkEventHandler implements EventHandler<ActionEvent> {
+				@Override
+				public void handle(ActionEvent event) {
+					getHostServices().showDocument("https://www.pokemon.com/us/pokemon-tcg/pokemon-cards");
+				}
+			}
+			Hyperlink link = new Hyperlink("https://www.pokemon.com/us/pokemon-tcg/pokemon-cards");
+			link.setOnAction(new hyperLinkEventHandler());
+
+			
+			VBox vBox = new VBox(name, type, stage, special, URL, buttons, link);
+			hBoxBottom.getChildren().addAll(cardImage, txaResults, vBox);
+		}
+	}
+	
+	// Saves card to manager
+	private class saveCardEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			String msg = "Card Added:\n"
+					   + "------------------\n";
+			int id = (int)(1+1000*Math.random());
+			String name = txfName.getText();
+			String type = txfType.getText();
+			String stage = txfStage.getText();
+			String special = txfSpecial.getText();
+			ArrayList<String> attributes = new ArrayList<>();
+			attributes.add("Pokémon");
+			attributes.add(type);
+			attributes.add(stage);
+			String[] specialTemp = special.split("'");
+			attributes.addAll(Arrays.asList(specialTemp));
+			String url = txfURL.getText();
+			CardObject dummy = new CardObject(id, name, type, stage, special, attributes, url);
+			msg += dummy.toString();
+			manager.addCard(dummy, false);
+			txaResults.setText(msg);
+			txfName.clear();
+			txfType.clear();
+			txfStage.clear();
+			txfSpecial.clear();
+			txfURL.clear();
+		}
+	}
+	
+	// Gives helper info to build a card
+	private class buildCardHelpEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			String msg = "How to build a card:\n"
+					   + "Check your card for its name\n"
+					   + "Type:Your card's element\n"
+					   + "Stage: Look at your card top left\n"
+					   + "Special: Is it Mega? EX?\n"
+					   + "Else type \"None\"\n"
+					   + "Use link to find your card\n"
+					   + "And copy/paste it's image link";
+			txaResults.setText(msg);
+		}
+	}
+	//---------------------------------------------------
+	
+	
+	
+	// Builds remove card GUI
+	//---------------------------------------------------
+	private class removeCardBuildEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			isRemoveCard = true;
+			hBoxBottom.getChildren().clear();
+			String s1 = "https://i0.wp.com/sleevenocardbehind.com/wp-content/uploads/2022/11/thumbnail_IMG_8444.jpg";
+			Image card = new Image(s1);
+			cardImage = new ImageView(card);
+			cardImage.setX(250);
+			cardImage.setY(250);
+			cardImage.setFitHeight(250); 
+			cardImage.setFitWidth(250);
+			cardImage.setPreserveRatio(true);
+			String msg = "Remove a Card!\n"
+					   + "---------------------------------------------\n"
+					   + "Use attributes to find your card\n"
+					   + "and press the button!\n"
+					   + "Make sure to save after altering the deck!!\n";
+			
+			txaResults = new TextArea(msg);
+		    txaResults.setPrefWidth(300);
+		    txaResults.setEditable(false);
+			
+			Button btnRemoveCard = new Button("Remove Card");
+			btnRemoveCard.setOnAction(new removeCardEventHandler());
+			
+			Button btnGoBack = new Button("Go Back");
+			btnGoBack.setOnAction(new goBackEventHandler());
+			VBox vBoxButtons = new VBox(btnRemoveCard, btnGoBack);
+			
+			hBoxBottom.getChildren().addAll(cardImage,txaResults,vBoxButtons);
+		}
+	}
+	
+	// Removes a card
+	// Theres more to this but its not really important to know
+	private class removeCardEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			if (selectedCard != null) {
+				manager.removeCard(selectedCard);
+				flipCard();
+				String msg = "Removed:\n"
+						   + "---------------------------------------------\n"
+						   + selectedCard.toString();
+				txaResults.setText(msg);
+				selectedCard = null;
+			}
+		}
+	}	
+	
+	// Used for both Build Card and Remove Card GUI
+	// to revert back to original GUI
+	private class goBackEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			isRemoveCard  = false;
+			selectedCard = null;
+			
+			hBoxBottom.getChildren().clear();
+			String s1 = "https://i0.wp.com/sleevenocardbehind.com/wp-content/uploads/2022/11/thumbnail_IMG_8444.jpg";
+			Image card = new Image(s1);
+			cardImage = new ImageView(card);
+			cardImage.setX(250);
+			cardImage.setY(250);
+			cardImage.setFitHeight(250); 
+			cardImage.setFitWidth(250);
+			cardImage.setPreserveRatio(true);
+			
+			String beginningMsg = "Welcome to the Pokemon Card Database program!\n"
+					+ "---------------------------------------------\n"
+					+ "To begin: Please click the \"Load\" button to\n"
+					+ "load a premade deck.\n"
+					+ "Or select \"Add a Card\" to create a card!\n";
+
+			txaResults = new TextArea(beginningMsg);
+			txaResults.setPrefWidth(650);
+			txaResults.setEditable(false);
+
+			hBoxBottom.getChildren().addAll(cardImage, txaResults);
+		}
+	}
+	//------------------------------------------------------------------
+	
+	
+	
+	
+	// Shows image of card after its selected from card dropdown menu
+	private class showImageEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			String desiredCard = ((MenuItem) event.getSource()).getText();
+			List<CardObject> cardObjects = manager.getMatching(getGUIAttributes());
+			for(CardObject h : cardObjects) {
+				if (h.getName().equals(desiredCard)) {
+					Image image = new Image(h.getImageURL(), 500, 500, true, true);
+					cardImage.setImage(image);
+					selectedCard = h;
+					txaResults.setText(h.toString());
+					if (isRemoveCard) {
+						String msg = "This card?\n"
+								   + "---------------------------------------------\n"
+								   + "If this is the card you want to remove\n"
+								   + "press the \"Remove Card\" button";
+						txaResults.setText(msg);
+					}
+				}
 			}
 		}
 	}
