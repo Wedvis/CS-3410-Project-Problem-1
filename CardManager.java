@@ -41,6 +41,11 @@ public class CardManager
         cd.setId(newId);
         return newId;
     }
+    //Adds card to table. I'm lazy so it uses set if keepid; add and sets to newId otherwise
+    public int addCard(CardObject cd)
+    {
+        return add(cd);
+    }
     public int add(CardObject cd, boolean keepId)
     {
         return addCard(cd, keepId);
@@ -51,6 +56,10 @@ public class CardManager
         return addCard(cd, false);
     }
 
+    public CardObject removeCard(CardObject cd)
+    {
+        return remove(cd.getId());
+    }
     public CardObject remove(int id)
     {
         CardObject card = manager.getById(id);
