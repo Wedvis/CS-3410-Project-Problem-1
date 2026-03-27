@@ -30,7 +30,7 @@ public class CardManager
         AttributeSet temp = new AttributeSet(cd.getAtributes());
         if(keepId)
         {
-            CardObject old = removeById(cd.getId());
+            CardObject old = remove(cd.getId());
             AttributeSet oldAttr = null;
             if(old!=null)
                 oldAttr = new AttributeSet(old.getAtributes());
@@ -41,14 +41,17 @@ public class CardManager
         cd.setId(newId);
         return newId;
     }
-
-    //Removes card with id provided
-    public void removeCard(CardObject cd)
+    public int add(CardObject cd, boolean keepId)
     {
-        manager.removeId(cd.getId(),new AttributeSet(cd.getAtributes()));
+        return addCard(cd, keepId);
     }
 
-    public CardObject removeById(int id)
+    public int add(CardObject cd)
+    {
+        return addCard(cd, false);
+    }
+
+    public CardObject remove(int id)
     {
         CardObject card = manager.getById(id);
         if(card==null)
@@ -105,24 +108,29 @@ public class CardManager
         addMultiple(keepId, (CardObject[])cards.toArray());
     }
 
+    //Does not keep other ids
+    public void mergeCollection(CardManager other)
+    {
+        for(CardObject cd : other.getMatching(null))
+        {
+            add(cd);
+        }
+    }
+
     //Call before Adding Cards
     public void applyTableString(String table)
     {
         String[] entries = table.split(";\n");
         for(String str : entries)
         {
-            System.out.println(str);
             String[] keyVal = str.split("##");
-            System.out.println(keyVal[0] + "----" + keyVal[1]);
             HashSet<String> attrKey = new HashSet<>();
             if(keyVal[0].length()>2)
                 for(String attr : keyVal[0].substring(1,keyVal[0].length()-1).split(", "))
                 {
-                    // System.out.println(attr);
                     attrKey.add(attr);
                 }
             ArrayList<Integer> ids = new ArrayList<>();
-            System.out.println(keyVal[1]+"\n");
             if(keyVal[1].length()>2)
                 for(String id : keyVal[1].substring(1,keyVal[1].length()-1).split(", "))
                 {
@@ -158,7 +166,7 @@ public class CardManager
             String msg = "";
             for(GenKeyVal<T,U> k : array)
             {
-                if(k==null || k.getVal()==null)
+                if(k==null || k.getVal()==null || k.getVal().toString().equals("[]"))
                     continue;
                 msg+= k.getkey() + "##" + k.getVal() + ";\n";
             }

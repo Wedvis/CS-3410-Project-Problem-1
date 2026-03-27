@@ -66,7 +66,8 @@ public class MapManager<T> {
                 attList = new ArrayList<>();
                 maps.put(attList, attributes);
             }
-            attList.add(val);
+            if(!attList.contains(val))
+                attList.add(val);
     }
 
     public void listAdd(int id,T object)
@@ -103,6 +104,8 @@ public class MapManager<T> {
             if(attList==null)
                 continue;
             attList.remove((Integer)id);
+            if(attList.isEmpty())
+                maps.put(null,att); // Marks empty attribute id list as deleted  
         }
     }
 

@@ -1,16 +1,16 @@
 package group_project;
 
-import java.util.Stack;
+import java.util.TreeSet;
 public class IdTable<T>
 {
     int size;
     private DblTableAutoResize<T,Integer> table;
-    private Stack<Integer> freedIds;
+    private TreeSet<Integer> freedIds;
     int nextId;
     public IdTable()
     {
         this.table = new DblTableAutoResize<>(2,0.75);
-        this.freedIds = new Stack<>();
+        this.freedIds = new TreeSet<>();
         nextId = 0;
         size=0;
     }
@@ -26,7 +26,9 @@ public class IdTable<T>
     {
         int id = nextId;
         if(!freedIds.isEmpty())
-            id=freedIds.pop();
+        {
+            id=freedIds.removeFirst();
+        }
         else
             nextId++;
         table.put(object, id);
@@ -40,6 +42,12 @@ public class IdTable<T>
         if(obj==null)
             return null;
         table.put(null,id);
+        freedIds.add(id);
+        while((freedIds.getLast()+1)==nextId)
+        {
+            freedIds.removeLast();
+            nextId--;
+        }
         size--;
         return obj;
     }
@@ -54,7 +62,7 @@ public class IdTable<T>
             return;
         for(int i = nextId; i<id;i++)
         {
-            freedIds.push(i);
+            freedIds.add(i);
         }
         nextId=id+1;
     }

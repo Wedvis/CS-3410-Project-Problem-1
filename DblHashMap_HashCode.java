@@ -19,7 +19,7 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
         int j = 0;
 
         for(int i = 0; i < array.length; ++i) {
-            if(array[i] != null) {
+            if(array[i] != null && array[i].getVal()!=null) {
                 tempArray[j] =  array[i];
                 j++;
             }
@@ -27,10 +27,15 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
 
         array = new KeyVal[size];
 
+        int newCount = 0;
         for(int i = 0; i < tempArray.length; i++) {
+            if(tempArray[i]==null)
+                break;
             put(tempArray[i].getVal(), tempArray[i].getkey());
+            newCount++;
         }
         isResize = false;
+        valCount = newCount;
     }
 
     //primary hash function, uses djb2 algorithm for hashing with high entropy large numbers
@@ -99,10 +104,11 @@ public class DblHashMap_HashCode<T, U> implements CustomHashMap<T, U>{
         for(int i = 0; i < array.length; i++) {
             int index = (int)((newHash + i) % array.length);
 
-            if(array[index] != null) {
-                if(key.equals(array[index].getkey())){
-                    return index;
-                }
+            if(array[index] == null) {
+                break;
+            }
+            if(key.equals(array[index].getkey())){
+                return index;
             }
 
         }
