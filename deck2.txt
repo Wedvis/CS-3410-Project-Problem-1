@@ -1,0 +1,14 @@
+!&%8
+88
+Pikachu
+Pokémon,Electric,
+Stage 1
+None
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_88.png
+!&%8
+1
+Test
+Pokémon,Fire
+Basic
+Future,EX
+https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SVP/SVP_EN_2.png
