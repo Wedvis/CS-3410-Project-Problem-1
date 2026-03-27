@@ -23,8 +23,8 @@ https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/SV04/
 11
 Mega Latias EX
 Pokémon,Dragon
-Mega
-EX
+Basic
+EX,Mega
 https://assets.pokemon.com/static-assets/content-assets/cms2/img/cards/web/MEP/MEP_EN_11.png
 !&%8
 32
