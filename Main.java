@@ -50,7 +50,7 @@ public class Main extends Application {
 	protected CardManager manager = new CardManager();
 	protected CardObject selectedCard = null;
 	protected Boolean isRemoveCard = false;
-	private final String PATH = "src/group_project";
+	private final String PATH = "./";
 	protected String typeSelectedAttribute = "None";
 	protected String stageSelectedAttribute = "None";
 	protected String specialSelectedAttribute = "None";
