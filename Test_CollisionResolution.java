@@ -24,6 +24,7 @@ public class Test_CollisionResolution {
                     }
                     
                 }
+                //divide probes_put by collision to get collision resolution values
                 long t2 = System.nanoTime();
                 System.out.println(t2 - t1);
                 System.out.println(test.probes_put);
