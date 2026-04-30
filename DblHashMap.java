@@ -2,15 +2,14 @@ package group_project;
 
 
 public class DblHashMap<T> implements StringHashMap<T> {
-
+//Note, this class is meant to be used for testing. Please implement proper dependencies, along the interfaces necessary.
+    
     public StringKeyVal<T>[] array;
     public int valCount = 0;
     public boolean isResize = false;
     public int collisions = 0;
     public int probes_put = 0;
     public int gets = 0;
-    public int probes_find = 0;
-    public int finds_occuring = 0;
 
     public DblHashMap(int size) {
         array = new StringKeyVal[size];
@@ -99,8 +98,7 @@ public class DblHashMap<T> implements StringHashMap<T> {
        return hash;
     }
 
-    //Helper for put, probes for next spot to place the value. Does so by using secondary hash function,
-    //and then adding 1 for every subsequent position in the array, to scan the whole array for a place.
+    //Helper for put, probes for next spot to place the value.
     private void probe(String key, StringKeyVal<T> keyval) {
         long newHash = 17 - (hash2(key) % 17);
         if(newHash == array.length) {
@@ -109,6 +107,8 @@ public class DblHashMap<T> implements StringHashMap<T> {
         long oldHash = hashfunction(key);
 
 //        long newHash = hash2(key);
+            //Commented code is used for the stop-gap measure. Uncomment if you want to use the stop-gap measure, and if you want to use non-prime table sizes
+            //You must uncomment this for the other probing helper method as well.
         boolean noPlace = true;
 
         for(int i = 1; i < array.length; i++) {
@@ -119,6 +119,8 @@ public class DblHashMap<T> implements StringHashMap<T> {
 
 //            int index = ((int)((newHash + i) % array.length));
             //Replace above line of code with commented line if you want to use non prime numbers for table size
+            //Commented code is used for the stop-gap measure. Uncomment if you want to use the stop-gap measure, and if you want to use non-prime table sizes
+            //You must uncomment this for the other probing helper method as well.
 
 
             if(array[index] == null) {
@@ -150,15 +152,22 @@ public class DblHashMap<T> implements StringHashMap<T> {
         if(newHash == array.length) {
             newHash -= 1;
         }
-//        long newHash = hash2(key);
+
         long oldHash = hashfunction(key);
+        
+        //long newHash = hash2(key);
+        //Commented code is used for the stop-gap measure. Uncomment if you want to use the stop-gap measure, and if you want to use non-prime table sizes
+        //You must uncomment this for the other probing helper method as well.
+
 
         for(int i = 1; i < array.length; i++) {
             int index = ((int)((oldHash + (i * newHash)) % array.length));
             ++gets;
             ++probes_find;
-//            int index = ((int)((newHash + i) % array.length));
-            //replace above code with commented line if you want to use non-prime table size.
+            //int index = ((int)((newHash + i) % array.length));
+            //Commented code is used for the stop-gap measure. Uncomment if you want to use the stop-gap measure, and if you want to use non-prime table sizes
+            //You must uncomment this for the other probing helper method as well.
+
 
             if(array[index] != null) {
                 if(key.equals(array[index].getkey())){
@@ -227,7 +236,7 @@ public class DblHashMap<T> implements StringHashMap<T> {
         }
     }
 
-    //get function, IMPORTANT: will produce null valueif key is not found, either initially or through using
+    //get function, IMPORTANT: will produce null value if key is not found, either initially or through using
     //find. Make sure the manager is able to account for the null values.
     @Override
     public StringKeyVal<T> get(String key) {
