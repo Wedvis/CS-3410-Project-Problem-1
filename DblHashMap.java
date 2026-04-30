@@ -2,7 +2,8 @@ package group_project;
 
 
 public class DblHashMap<T> implements StringHashMap<T> {
-
+//this is the testing file, please use with proper string interfaces for this to work
+//Note that this hash table does not automatically resize, you have to call resizePrime(), or resize(array.length * 2) once the array reaches half capacity
     public StringKeyVal<T>[] array;
     public int valCount = 0;
     public boolean isResize = false;
