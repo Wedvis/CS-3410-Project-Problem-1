@@ -3,6 +3,8 @@ package group_project;
 
 public class DblHashMap<T> implements StringHashMap<T> {
 //Note, this class is meant to be used for testing. Please implement proper dependencies, along the interfaces necessary.
+//Another note, if using traditional double hash you MUST use resizePrime(), otherwise the intervals are not coprime with the table size and
+//The hash table explodes
     
     public StringKeyVal<T>[] array;
     public int valCount = 0;
