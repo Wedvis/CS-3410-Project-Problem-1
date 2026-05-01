@@ -67,7 +67,7 @@ public class HashFunctions {
         long hash = 5381;
         char[] carr = key.toCharArray();
         for(char c: carr) {
-            hash = hash * 33 + c;
+            hash = hash * 17 + c;
         }
 
         return hash;
